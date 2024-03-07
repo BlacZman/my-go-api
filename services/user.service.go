@@ -5,12 +5,17 @@ import (
 )
 
 type UserService struct {
+	databaseService DatabaseService
 }
 
-func NewUserService() UserService {
-	return UserService{}
+func NewUserService(databaseService DatabaseService) UserService {
+	return UserService{
+		databaseService: databaseService,
+	}
 }
 
-func (u *UserService) getUser() models.User {
-	return models.User{}
+func (s UserService) GetUser(id uint) models.User {
+	var user models.User
+	s.databaseService.db.First(&user, id)
+	return user
 }

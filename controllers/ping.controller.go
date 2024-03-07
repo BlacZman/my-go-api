@@ -1,16 +1,24 @@
 package controllers
 
-import "github.com/gin-gonic/gin"
+import (
+	"my-go-api/services"
+
+	"github.com/gin-gonic/gin"
+)
 
 type PingController struct {
 	router *gin.Engine
+	config services.AppConfigService
 }
 
-func NewPingController(router *gin.Engine) PingController {
-	return PingController{router: router}
+func NewPingController(router *gin.Engine, config services.AppConfigService) PingController {
+	return PingController{
+		router: router,
+		config: config,
+	}
 }
 
-func pingHandler(context *gin.Context) {
+func (c PingController) pingHandler(context *gin.Context) {
 	result := gin.H{
 		"message": "pong",
 	}
@@ -18,5 +26,5 @@ func pingHandler(context *gin.Context) {
 }
 
 func (c PingController) ResolveRouter() {
-	c.router.GET("/ping", pingHandler)
+	c.router.GET("/ping", c.pingHandler)
 }
